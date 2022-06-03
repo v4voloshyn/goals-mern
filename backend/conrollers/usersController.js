@@ -3,7 +3,6 @@ const asyncHandler = require('express-async-handler');
 const bcrypt = require('bcryptjs');
 
 const userSchema = require('../models/userModel');
-const { JsonWebTokenError } = require('jsonwebtoken');
 
 // @desc Register new user
 // @route POST /api/v1/users
