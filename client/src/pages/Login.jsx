@@ -30,12 +30,13 @@ function Login() {
 
 	const handleFormSubmit = (e) => {
 		e.preventDefault();
-		dispatch(login(formData));
-	};
+		const userData = {
+			email,
+			password,
+		};
 
-	if (user) {
-		navigate('/');
-	}
+		dispatch(login(userData));
+	};
 
 	useEffect(() => {
 		if (isError) {
@@ -59,7 +60,7 @@ function Login() {
 				<h1>
 					<FaSignInAlt /> Login user
 				</h1>
-				<p>Login and start to do your goals</p>
+				<p>Login to see and write your goals</p>
 			</section>
 			<section className='form'>
 				<form onSubmit={handleFormSubmit}>
