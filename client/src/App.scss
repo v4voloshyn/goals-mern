@@ -171,6 +171,30 @@ h3 {
   margin-bottom: 20px;
 }
 
+.btn-center {
+  text-align: center;
+  margin: 0 auto;
+}
+
+.btn-edit {
+  background: rgb(91, 243, 159);
+  width: 60px;
+  height: 10px;
+  position: absolute;
+  top: 5px;
+  left: 5px;
+}
+
+.btn-edited {
+  background: rgb(254, 192, 69);
+  width: 70px;
+  height: 10px;
+  position: absolute;
+  bottom: 5px;
+  right: 5px;
+  pointer-events: none;
+}
+
 .btn:hover {
   transform: scale(0.98);
 }

@@ -1,13 +1,14 @@
-import { useEffect } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import GoalsForm from '../components/GoalsForm';
-import { getGoals, reset } from '../redux/goals/goalsSlice';
+import { clearErrors, getGoals, reset } from '../redux/goals/goalsSlice';
 import { toast } from 'react-toastify';
 import Spinner from '../components/Spinner';
 import GoalItem from '../components/GoalItem';
 
 function Dashboard() {
+	const [updateText, setUpdateText] = useState('');
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
 	const { user } = useSelector((state) => state.auth);
@@ -27,15 +28,27 @@ function Dashboard() {
 		if (!user) {
 			navigate('/login');
 		}
+		return () => {
+			// dispatch(reset());
+			// console.log('cleaned error');
+			dispatch(clearErrors());
+		};
+	}, [user, navigate, isError, message, dispatch]);
 
+	useEffect(() => {
 		if (user) {
 			dispatch(getGoals());
 		}
+	}, [user, dispatch]);
 
-		return () => {
-			dispatch(reset());
-		};
-	}, [user, navigate, isError, message, dispatch]);
+	const textIdRef = useRef(null);
+
+	const setUpdate = (text, textId) => {
+		setUpdateText(text);
+		if (textId) {
+			textIdRef.current = textId;
+		}
+	};
 
 	return (
 		<>
@@ -44,12 +57,16 @@ function Dashboard() {
 				<h3>This is you'r goals dashboard</h3>
 			</section>
 			{isLoading && <Spinner />}
-			<GoalsForm />
+			<GoalsForm
+				updateText={updateText}
+				textId={textIdRef.current}
+				setUpdate={setUpdate}
+			/>
 
 			<div className='goals'>
 				{!goals?.length && <h3>You have no goals :(</h3>}
 				{goals.map((goal) => (
-					<GoalItem key={goal._id} {...goal} />
+					<GoalItem key={goal._id} {...goal} setUpdate={setUpdate} />
 				))}
 			</div>
 		</>

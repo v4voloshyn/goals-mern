@@ -1,17 +1,38 @@
-import { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { createGoal, getGoals } from '../redux/goals/goalsSlice';
+import { toast } from 'react-toastify';
+import { createGoal, updateGoal } from '../redux/goals/goalsSlice';
 
-function GoalsForm() {
-	const [text, setText] = useState('');
-
+const GoalsForm = React.memo(function ({ updateText, setUpdate, textId }) {
+	const [text, setText] = useState(updateText || '');
 	const dispatch = useDispatch();
 
 	const handleSubmit = (e) => {
 		e.preventDefault();
-		dispatch(createGoal({ text }));
+		if (!text) {
+			toast.error('Input field is required');
+			return;
+		}
+
+		if (text === updateText) {
+			setText('');
+			setUpdate('', null);
+			return;
+		}
+
+		if (updateText) {
+			dispatch(updateGoal({ text: text, id: textId }));
+		} else {
+			dispatch(createGoal({ text }));
+		}
+
 		setText('');
+		setUpdate('', null);
 	};
+
+	useEffect(() => {
+		setText(updateText);
+	}, [updateText]);
 
 	return (
 		<section className='form'>
@@ -27,12 +48,29 @@ function GoalsForm() {
 						onChange={(e) => setText(e.target.value)}
 					/>
 				</div>
-				<div className='form-group'>
-					<button className='btn btn-block'>Set goal!</button>
-				</div>
+				{updateText ? (
+					<div style={{ display: 'flex', justifyContent: 'center' }}>
+						<div className='form-group'>
+							<button className='btn btn-block'>Update goal!</button>
+						</div>
+						<div className='form-group'>
+							<button
+								type='button'
+								className='btn btn-block'
+								onClick={() => setUpdate('', null)}
+							>
+								Cancel
+							</button>
+						</div>
+					</div>
+				) : (
+					<div className='form-group'>
+						<button className='btn btn-block'>Set goal!</button>
+					</div>
+				)}
 			</form>
 		</section>
 	);
-}
+});
 
 export default GoalsForm;
