@@ -25,7 +25,6 @@ function Login() {
 			...prevState,
 			[e.target.name]: e.target.value,
 		}));
-		console.log(formData);
 	};
 
 	const handleFormSubmit = (e) => {
