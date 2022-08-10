@@ -1,5 +1,5 @@
 {
-  "name": "train-auth-react",
+  "name": "goals-mern-front",
   "version": "0.1.0",
   "proxy": "http://localhost:7007",
   "private": true,
